@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"time"
 )
 
@@ -28,10 +27,6 @@ type RespScoresInfo struct {
 	ID         int    `json:"id"`
 }
 
-func QueryRankInfo(w http.ResponseWriter, r *http.Request) {
-	resp := defaultResp()
-	Response(w, http.StatusOK, StatusSuccess, "", resp)
-}
 
 func defaultResp() RespRank {
 	return RespRank{
@@ -71,3 +66,5 @@ func defaultResp() RespRank {
 		},
 	}
 }
+
+
