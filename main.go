@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"errors"
 	"flag"
 	"fmt"
@@ -17,21 +16,21 @@ import (
 
 var configPath string
 
-func init()  {
-	flag.StringVar(&configPath,"config","config.toml","config config.toml")
+func init() {
+	flag.StringVar(&configPath, "c", "config.toml", "config config.toml")
 }
 
 func main() {
 	mergeLocalConfig(configPath)
 	m := NewModule(viper.GetString("leveldb.path"))
-	c:= NewController(m)
+	c := NewController(m)
 	c.InitRouter()
 	ogurl := viper.GetString("og.url")
-	if ogurl =="" {
-		panicIfError(errors.New("miss og url"),"")
+	if ogurl == "" {
+		panicIfError(errors.New("miss og url"), "")
 	}
-	_, sk:= crypto.Signer.RandomKeyPair()
-	s := NewRankSpider(m,ogurl,sk)
+	_, sk := crypto.Signer.RandomKeyPair()
+	s := NewRankSpider(m, ogurl, sk)
 	s.Start()
 	fmt.Println("---------Server Start!---------")
 	fmt.Println("Port: ", 10001)
@@ -69,11 +68,10 @@ func mergeLocalConfig(configPath string) {
 	return
 }
 
-func panicIfError(err error , message string)  {
-	if err!=nil {
-		fmt.Println("will panic ",err,message)
+func panicIfError(err error, message string) {
+	if err != nil {
+		fmt.Println("will panic ", err, message)
 		panic(err)
 	}
 
 }
-

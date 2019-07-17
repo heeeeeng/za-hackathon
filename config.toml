@@ -2,4 +2,4 @@
 	path = "leveldb"
 
 [og]
- "url" = ""
+ "url" = "fakeurl:8000"
