@@ -1,9 +1,11 @@
 package main
 
 import (
+
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/annchain/OG/common/crypto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"net/http"
@@ -28,7 +30,8 @@ func main() {
 	if ogurl =="" {
 		panicIfError(errors.New("miss og url"),"")
 	}
-	s := NewRankSpider(m,ogurl)
+	_, sk:= crypto.Signer.RandomKeyPair()
+	s := NewRankSpider(m,ogurl,sk)
 	s.Start()
 	fmt.Println("---------Server Start!---------")
 	fmt.Println("Port: ", 10001)
@@ -47,7 +50,7 @@ func main() {
 		log.Warnf("caught sig: %+v", sig)
 		log.Warn("Exiting... Please do no kill me")
 		s.stop()
-		m.Db.Close()
+		m.Close()
 		os.Exit(0)
 	}()
 }

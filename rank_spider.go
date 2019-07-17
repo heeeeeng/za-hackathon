@@ -1,30 +1,28 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
+	"github.com/annchain/OG/client/tx_client"
+	"github.com/annchain/OG/common"
 	"github.com/annchain/OG/common/crypto"
-	_ "github.com/annchain/OG/rpc"
-	"io/ioutil"
-	"net/http"
+	"github.com/annchain/OG/rpc"
+
 	"time"
 )
 
 type RankSpider struct {
 	module *Module
-	client  *http.Client
+	client  *tx_client.TxClient
 	OgUri  string
 	quit   chan bool
 }
 
-func NewRankSpider(m *Module , sk crypto.PrivateKey) *RankSpider {
+func NewRankSpider(m *Module ,ogrul string, sk crypto.PrivateKey) *RankSpider {
+	client :=tx_client.NewTxClient(ogrul,false)
 	return &RankSpider{
 		module: m,
-		client: &http.Client{
-			Timeout:   time.Second * 10,
-			Transport: http.DefaultTransport,
-		},
+		client: &client,
+		OgUri:ogrul,
+		quit: make(chan bool),
 	}
 }
 
@@ -52,43 +50,14 @@ func (r *RankSpider) start() {
 
 
 func (a *RankSpider) fetchDataFromOg() {
-
+	addr := common.RandomAddress()
+	req := &rpc.NewQueryContractReq{
+		Address:addr.String(),
+		Data:"testdata",
+	}
+   _  = req
 }
 
-func (a *RankSpider) queryDataFromOG(url string) (string, error) {
 
-	req, err := http.NewRequest("GET", url, nil)
-	resp, err := a.client.Do(req)
-	if err != nil {
-		//fmt.Println(err)
-		return "", err
-	}
-	//now := time.Now()
-	defer resp.Body.Close()
-	resDate, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
 
-	str := string(resDate)
-	if err != nil {
-		fmt.Println(str, err)
-		return "", err
-	}
-	if resp.StatusCode != 200 {
-		//panic( resp.StatusCode)
-		fmt.Println(resp.StatusCode)
-		return "", errors.New(resp.Status)
-	}
-	var respStruct struct {
-		Data string `json:"data"`
-	}
-	err = json.Unmarshal(resDate, &respStruct)
-	if err != nil {
-		//fmt.Println(str, err)
-		return "", err
-	}
-	return respStruct.Data, nil
-
-}
 

@@ -1,17 +1,23 @@
 package main
 
+import "github.com/annchain/OG/ogdb"
+
 type Module struct {
-	Db *LevelDB
+	db ogdb.Database
+}
+
+func (m*Module)Close() {
+	m.db.Close()
 }
 
 func NewModule(dbPath string ) *Module {
 	m:= &Module{
 
 	}
-	db,err :=  NewLevelDB(dbPath,16,16)
+	db,err :=  ogdb.NewLevelDB(dbPath,16,16)
 	if err!=nil {
 		panicIfError(err,"")
 	}
-	m.Db = db
+	m.db = db
 	return m
 }
