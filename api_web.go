@@ -10,9 +10,16 @@ type RespRank struct {
 }
 
 type RespRankInfo struct {
-	TeamName string `json:"team_name"`
-	StatusA  string `json:"a_scores"`
-	StatusB  string `json:"b_scores"`
+	MissionB   string             `json:"mission_b"`
+	RankNum    string             `json:"rank_num"`
+	ScoresInfo RespRankInfoScores `json:"scores_info"`
+}
+
+type RespRankInfoScores struct {
+	TeamName    string `json:"team_name"`
+	StatusA     string `json:"a_scores"`
+	StatusB     string `json:"b_scores"`
+	StatusTotal string `json:"total_scores"`
 }
 
 type RespRankList struct {
@@ -21,19 +28,23 @@ type RespRankList struct {
 }
 
 type RespScoresInfo struct {
-	TeamName   string `json:"team_name"`
-	StatusA    string `json:"a_scores"`
-	CreateTime int64  `json:"create_time"`
-	ID         int    `json:"id"`
+	TeamName    string `json:"team_name"`
+	StatusA     string `json:"a_scores"`
+	StatusB     string `json:"b_scores"`
+	StatusTotal string `json:"total_scores"`
+	CreateTime  int64  `json:"create_time"`
+	UpdateTime  int64  `json:"update_time"`
+	ID          int    `json:"id"`
 }
-
 
 func defaultResp() RespRank {
 	return RespRank{
 		RankInfo: RespRankInfo{
-			TeamName: "超级大西瓜",
-			StatusA:  "已完成",
-			StatusB:  "未完成",
+			ScoresInfo: RespRankInfoScores{
+				TeamName: "超级大西瓜",
+				StatusA:  "已完成",
+				StatusB:  "未完成",
+			},
 		},
 		RankList: []RespRankList{
 			RespRankList{
@@ -66,5 +77,3 @@ func defaultResp() RespRank {
 		},
 	}
 }
-
-

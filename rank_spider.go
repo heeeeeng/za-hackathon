@@ -11,21 +11,20 @@ import (
 
 type RankSpider struct {
 	module *Module
-	client  *tx_client.TxClient
+	client *tx_client.TxClient
 	OgUri  string
 	quit   chan bool
 }
 
-func NewRankSpider(m *Module ,ogrul string, sk crypto.PrivateKey) *RankSpider {
-	client :=tx_client.NewTxClient(ogrul,false)
+func NewRankSpider(m *Module, ogrul string, sk crypto.PrivateKey) *RankSpider {
+	client := tx_client.NewTxClient(ogrul, false)
 	return &RankSpider{
 		module: m,
 		client: &client,
-		OgUri:ogrul,
-		quit: make(chan bool),
+		OgUri:  ogrul,
+		quit:   make(chan bool),
 	}
 }
-
 
 func (r *RankSpider) Start() {
 	go r.start()
@@ -47,17 +46,11 @@ func (r *RankSpider) start() {
 	time.Sleep(time.Second * 5)
 }
 
-
-
 func (a *RankSpider) fetchDataFromOg() {
 	addr := common.RandomAddress()
 	req := &rpc.NewQueryContractReq{
-		Address:addr.String(),
-		Data:"testdata",
+		Address: addr.String(),
+		Data:    "testdata",
 	}
-   _  = req
+	_ = req
 }
-
-
-
-
