@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	go RankSpider()
+
 	InitRouter()
 
 	fmt.Println("---------Server Start!---------")
