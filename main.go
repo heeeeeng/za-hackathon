@@ -4,7 +4,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/annchain/OG/common/crypto"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"net/http"
@@ -22,15 +21,20 @@ func init() {
 
 func main() {
 	mergeLocalConfig(configPath)
-	m := NewModule(viper.GetString("leveldb.path"))
+	m := NewModule()
 	c := NewController(m)
 	c.InitRouter()
+	host:= viper.GetString("db.host")
+	username:=viper.GetString("db.user_name")
+	pass :=viper.GetString("db.pass")
+	dbName :=viper.GetString("db.name")
+	m.InitDataBase(host,dbName,username,pass)
 	ogurl := viper.GetString("og.url")
-	if ogurl == "" {
-		panicIfError(errors.New("miss og url"), "")
+	contractAddress:=viper.GetString("og.contract_address")
+	if ogurl == ""||contractAddress =="" {
+		panicIfError(errors.New("miss og url or contract address"), "")
 	}
-	_, sk := crypto.Signer.RandomKeyPair()
-	s := NewRankSpider(m, ogurl, sk)
+	s := NewRankSpider(m, ogurl, contractAddress)
 	s.Start()
 	fmt.Println("---------Server Start!---------")
 	fmt.Println("Port: ", 10001)
