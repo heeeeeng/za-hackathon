@@ -79,6 +79,7 @@ type NewQueryContractReq struct {
 }
 
 func (a *RankSpider) fetchDataFromOg() {
+	//todo get phone list from db
 	var TeamInfos []TeamInfo
 	a.TeamInfoCollection.Find(bson.M{}).All(&TeamInfos)
 	for _, team := range TeamInfos {
@@ -90,6 +91,7 @@ func (a *RankSpider) fetchDataFromOg() {
 			continue
 		}
 		if score.StatusA =="已完成" {
+			logrus.WithField("score ", score).Debug("already registered")
 			//already registered
 			continue
 		}
@@ -97,6 +99,7 @@ func (a *RankSpider) fetchDataFromOg() {
 		ok, err := a.getRegisterStatusFromOg(team.Phone)
 		if err != nil {
 			logrus.WithError(err).Warn("get response error")
+			continue
 		}
 		if err == nil && ok {
 			//wrie ok
