@@ -64,7 +64,7 @@ func (r *RankSpider) start() {
 		select {
 		case <-time.After(time.Second * 30):
 			r.fetchDataFromOg()
-		case <-time.After(time.Second * 19 * 19 * 2):
+		case <-time.After(time.Second * 31):
 			r.fetchTeamInfo()
 		case <-r.quit:
 			logrus.Info("got quit signal , stopping")
