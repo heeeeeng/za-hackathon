@@ -79,8 +79,8 @@ type NewQueryContractReq struct {
 }
 
 func (a *RankSpider) fetchDataFromOg() {
-	//todo get phone list from db
 	var TeamInfos []TeamInfo
+	a.TeamInfoCollection.Find(bson.M{}).All(&TeamInfos)
 	for _, team := range TeamInfos {
 		//todo get result from db
 		var score ScoreInfo
