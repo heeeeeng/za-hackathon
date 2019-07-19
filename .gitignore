@@ -2,3 +2,4 @@
 *.exe
 za-hackthon
 /.project
+.idea/workspace.xml
