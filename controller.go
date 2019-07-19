@@ -4,7 +4,7 @@ import "net/http"
 
 type Controller struct {
 	//
-	module *Module
+	module     *Module
 	rankSpider *RankSpider
 }
 
@@ -27,9 +27,7 @@ func (c *Controller) QueryRankInfo(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-
-
-func (c *Controller)getRankInfo(teamName string ) RespRank{
+func (c *Controller) getRankInfo(teamName string) RespRank {
 	return c.rankSpider.GetRankInfo(teamName)
 }
 
