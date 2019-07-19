@@ -24,7 +24,7 @@ RUN apk add --no-cache curl iotop busybox-extras
 COPY --from=builder /app/config.toml /opt/config.toml
 COPY --from=builder /app/main /opt/main
 
-EXPOSE 8000
+EXPOSE 10001
 
 WORKDIR /opt
 
