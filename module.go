@@ -12,9 +12,10 @@ type Module struct {
 
 func (m*Module)Close() {
 	//todo
+	//m.db.Session.Close()
 }
 
-func NewModule(  ) *Module {
+func NewModule() *Module {
 	m:= &Module{
 	}
 	return m
@@ -25,8 +26,9 @@ func (m*Module)InitDataBase( host string ,dbName string, userName string ,pass s
 		Addrs: []string{host},
 		Timeout: time.Second*10,
 		Database: dbName,
-		Username:userName,
+		Username: userName,
 		Password: pass,
+		Source: "admin",
 	}
 	session ,err := mgo.DialWithInfo(&dialInfo)
 	panicIfError(err,"mgo dial error")

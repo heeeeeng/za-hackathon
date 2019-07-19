@@ -5,6 +5,7 @@ import "net/http"
 type Controller struct {
 	//
 	module *Module
+	rankSpider *RankSpider
 }
 
 func NewController(m *Module) *Controller {
@@ -21,9 +22,15 @@ func (c *Controller) QueryRankInfo(w http.ResponseWriter, r *http.Request) {
 		Response(w, http.StatusBadRequest, StatusFail, "miss team name", nil)
 		return
 	}
-	resp := defaultResp()
+	resp := c.getRankInfo(teamName)
 	Response(w, http.StatusOK, StatusSuccess, "", resp)
 	return
+}
+
+
+
+func (c *Controller)getRankInfo(teamName string ) RespRank{
+	return c.rankSpider.GetRankInfo(teamName)
 }
 
 func corsOrigin(wP *http.ResponseWriter) {

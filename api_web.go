@@ -77,3 +77,17 @@ func defaultResp() RespRank {
 		},
 	}
 }
+
+
+
+func notFoundResp() RespRank {
+	return RespRank{
+		RankInfo: RespRankInfo{
+			ScoresInfo: RespRankInfoScores{
+				TeamName: "暂无",
+				StatusA:  "暂无",
+				StatusB:  "暂无",
+			},
+		},
+	}
+}
