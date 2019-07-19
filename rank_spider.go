@@ -217,7 +217,7 @@ func (a *RankSpider) getTeamInfoFromAPI() ([]TeamInfoAPIItemRet, error) {
 func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 	request := &NewQueryContractReq{
 		Address: a.contractAddr,
-		Data:    a.calculateDate(""),
+		Data:    a.calculateDate(phone),
 	}
 	data, err := json.Marshal(request)
 	if err != nil {
