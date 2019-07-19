@@ -21,6 +21,9 @@ func init() {
 
 func main() {
 	mergeLocalConfig(configPath)
+
+	viper.Debug()
+
 	m := NewModule()
 	c := NewController(m)
 	log.SetLevel(log.DebugLevel)
@@ -29,13 +32,13 @@ func main() {
 	pass := viper.GetString("db.pass")
 	dbName := viper.GetString("db.name")
 	webUri := viper.GetString("web.uri")
-	m.InitDataBase(host,dbName,username,pass)
+	m.InitDataBase(host, dbName, username, pass)
 	ogurl := viper.GetString("og.url")
-	contractAddress:=viper.GetString("og.contract_address")
-	if ogurl == ""||contractAddress =="" {
+	contractAddress := viper.GetString("og.contract_address")
+	if ogurl == "" || contractAddress == "" {
 		panicIfError(errors.New("miss og url or contract address"), "")
 	}
-	s := NewRankSpider(m, ogurl, contractAddress,webUri)
+	s := NewRankSpider(m, ogurl, contractAddress, webUri)
 	c.rankSpider = s
 	s.Start()
 	c.InitRouter()
@@ -72,6 +75,9 @@ func mergeLocalConfig(configPath string) {
 	viper.SetConfigType("toml")
 	err = viper.MergeConfig(file)
 	panicIfError(err, fmt.Sprintf("Error on reading config file: %s", absPath))
+
+	viper.SetEnvPrefix("hk")
+	viper.AutomaticEnv()
 	return
 }
 

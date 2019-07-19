@@ -14,7 +14,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN go build
+RUN go build -o main
 
 # Copy OG into basic alpine image
 FROM alpine:latest
