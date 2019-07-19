@@ -18,10 +18,10 @@ func (c *Controller) QueryRankInfo(w http.ResponseWriter, r *http.Request) {
 	corsOrigin(&w)
 
 	teamName := r.URL.Query().Get("team_name")
-	if teamName == "" {
-		Response(w, http.StatusBadRequest, StatusFail, "miss team name", nil)
-		return
-	}
+	//if teamName == "" {
+	//	Response(w, http.StatusBadRequest, StatusFail, "miss team name", nil)
+	//	return
+	//}
 	resp := c.getRankInfo(teamName)
 	Response(w, http.StatusOK, StatusSuccess, "", resp)
 	return
