@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba8adeec-4e87-4ef9-96bc-5ef84572e612" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,7 +14,7 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.go">
+        <entry file="file://$PROJECT_DIR$/module.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-113">
               <caret line="38" column="18" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
@@ -22,7 +23,7 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module.go">
+        <entry file="file://$PROJECT_DIR$/../../go/pkg/mod/github.com/globalsign/mgo@v0.0.0-20181015135952-eeefdecb41b8/session.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="336">
               <caret line="42" column="32" selection-start-line="42" selection-start-column="32" selection-end-line="42" selection-end-column="32" />
@@ -120,7 +121,7 @@
       <find>Session</find>
     </findStrings>
   </component>
-  <component name="GOROOT" path="/usr/local/Cellar/go/1.12/libexec" />
+  <component name="GOROOT" path="C:\Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -132,13 +133,13 @@
         <option value="$PROJECT_DIR$/router.go" />
         <option value="$PROJECT_DIR$/db.go" />
         <option value="$PROJECT_DIR$/api_web.go" />
-        <option value="$PROJECT_DIR$/controller.go" />
         <option value="$PROJECT_DIR$/api_db.go" />
         <option value="$PROJECT_DIR$/go.mod" />
         <option value="$PROJECT_DIR$/rank_spider.go" />
         <option value="$PROJECT_DIR$/module.go" />
         <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/config.toml" />
+        <option value="$PROJECT_DIR$/controller.go" />
       </list>
     </option>
   </component>
@@ -242,6 +243,9 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
     <proxy>https://goproxy.io</proxy>
@@ -341,7 +345,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module.go">
+    <entry file="file://$PROJECT_DIR$/api_web.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="42" column="32" selection-start-line="42" selection-start-column="32" selection-end-line="42" selection-end-column="32" />

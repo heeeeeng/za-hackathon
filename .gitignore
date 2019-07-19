@@ -1,4 +1,4 @@
 .idea/
 *.exe
 za-hackthon
-leveldb/
+/.project

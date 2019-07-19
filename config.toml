@@ -1,9 +1,14 @@
 [db]
 	name = "za-hack-block-chain"
-	user_name = "og_admin"
+	user_name = "root"
+	#seceret, set this privately
 	pass ="123456"
-	host ="127.0.0.1"
+	host ="172.28.152.101"
 
 [og]
- "url" = "fakeurl:8000"
- contract_address = "0x010400000000000000"
+ "url" = "172.152.28.101:8000"
+ contract_address = "0xa3fa6b326c91bfa1addd6fa9fd27f266cce43e0d"
+
+[web]
+    #seceret, set this privately
+   uri ="https://fakeurl"

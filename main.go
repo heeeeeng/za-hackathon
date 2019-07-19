@@ -21,21 +21,27 @@ func init() {
 
 func main() {
 	mergeLocalConfig(configPath)
+
+	viper.Debug()
+
 	m := NewModule()
 	c := NewController(m)
-	c.InitRouter()
-	host:= viper.GetString("db.host")
-	username:=viper.GetString("db.user_name")
-	pass :=viper.GetString("db.pass")
-	dbName :=viper.GetString("db.name")
-	m.InitDataBase(host,dbName,username,pass)
+	log.SetLevel(log.DebugLevel)
+	host := viper.GetString("db.host")
+	username := viper.GetString("db.user_name")
+	pass := viper.GetString("db.pass")
+	dbName := viper.GetString("db.name")
+	webUri := viper.GetString("web.uri")
+	m.InitDataBase(host, dbName, username, pass)
 	ogurl := viper.GetString("og.url")
-	contractAddress:=viper.GetString("og.contract_address")
-	if ogurl == ""||contractAddress =="" {
+	contractAddress := viper.GetString("og.contract_address")
+	if ogurl == "" || contractAddress == "" {
 		panicIfError(errors.New("miss og url or contract address"), "")
 	}
-	s := NewRankSpider(m, ogurl, contractAddress)
+	s := NewRankSpider(m, ogurl, contractAddress, webUri)
+	c.rankSpider = s
 	s.Start()
+	c.InitRouter()
 	fmt.Println("---------Server Start!---------")
 	fmt.Println("Port: ", 10001)
 	go func() {
@@ -52,7 +58,7 @@ func main() {
 		sig := <-gracefulStop
 		log.Warnf("caught sig: %+v", sig)
 		log.Warn("Exiting... Please do no kill me")
-		s.stop()
+		s.Stop()
 		m.Close()
 		os.Exit(0)
 	}()
@@ -69,6 +75,9 @@ func mergeLocalConfig(configPath string) {
 	viper.SetConfigType("toml")
 	err = viper.MergeConfig(file)
 	panicIfError(err, fmt.Sprintf("Error on reading config file: %s", absPath))
+
+	viper.SetEnvPrefix("hk")
+	viper.AutomaticEnv()
 	return
 }
 
