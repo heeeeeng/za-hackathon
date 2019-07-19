@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/globalsign/mgo"
@@ -243,14 +244,31 @@ func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 		return false, err
 	}
 	var stateResp struct {
-		Data bool `json:"data"`
+		Data string `json:"data"`
 	}
 	err = json.Unmarshal(resDate, &stateResp)
 	if err != nil {
 		//fmt.Println("encode nonce errror ", err)
 		return false, err
 	}
-	return stateResp.Data, nil
+	if d, err  :=  hex.DecodeString(stateResp.Data); err !=nil {
+		logrus.WithError(err).Warn("decode hex error")
+		return false ,err
+	}else {
+		if len(d) != 32 {
+			logrus.WithField("data ",stateResp.Data).WithField("len ", len(d)).Warn("data len error")
+		return false ,nil
+		}
+		if d[32] == 0x00 {
+			return false,nil
+		}else if d[32] == 0x01 {
+			logrus.WithField("phone ", phone).Info("got status true")
+			return true, nil
+		}else {
+			logrus.WithField("data ",stateResp.Data).WithField("len ", len(d)).Warn("got wrong data")
+			return false ,nil
+		}
+	}
 }
 
 
