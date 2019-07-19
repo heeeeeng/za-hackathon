@@ -119,7 +119,7 @@ func Keccak256(data ...[]byte) []byte {
 	return d.Sum(nil)
 }
 
-func (a *RankSpider) calculateDate(phone string) string {
+func (a *RankSpider) calculateData(phone string) string {
 	code := "hello hacker: "
 	hash := Keccak256([]byte(code + phone))
 
@@ -214,7 +214,7 @@ func (a *RankSpider) getTeamInfoFromAPI() ([]TeamInfoAPIItemRet, error) {
 func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 	request := &NewQueryContractReq{
 		Address: a.contractAddr,
-		Data:    a.calculateDate(phone),
+		Data:    a.calculateData(phone),
 	}
 	data, err := json.Marshal(request)
 	if err != nil {
@@ -229,12 +229,12 @@ func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 	}
 	//now := time.Now()
 	defer resp.Body.Close()
-	resDate, err := ioutil.ReadAll(resp.Body)
+	resData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		logrus.WithError(err).Warn("got response err")
 		return false, err
 	}
-	str := string(resDate)
+	str := string(resData)
 	if err != nil {
 		logrus.WithError(err).Warn(str)
 		return false, err
@@ -247,7 +247,7 @@ func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 	var stateResp struct {
 		Data string `json:"data"`
 	}
-	err = json.Unmarshal(resDate, &stateResp)
+	err = json.Unmarshal(resData, &stateResp)
 	if err != nil {
 		//fmt.Println("encode nonce errror ", err)
 		return false, err
@@ -260,9 +260,9 @@ func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 			logrus.WithField("data ",stateResp.Data).WithField("len ", len(d)).Warn("data len error")
 		return false ,nil
 		}
-		if d[32] == 0x00 {
+		if d[31] == 0x00 {
 			return false,nil
-		}else if d[32] == 0x01 {
+		}else if d[31] == 0x01 {
 			logrus.WithField("phone ", phone).Info("got status true")
 			return true, nil
 		}else {
