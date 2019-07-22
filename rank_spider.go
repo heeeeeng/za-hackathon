@@ -5,14 +5,15 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/globalsign/mgo"
-	"github.com/globalsign/mgo/bson"
-	"github.com/sirupsen/logrus"
-	"golang.org/x/crypto/sha3"
 	"io/ioutil"
 	"net/http"
 	"sort"
 	"time"
+
+	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
+	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/sha3"
 )
 
 const (
@@ -79,6 +80,7 @@ type NewQueryContractReq struct {
 }
 
 func (a *RankSpider) fetchDataFromOg() {
+	//todo get phone list from db
 	var TeamInfos []TeamInfo
 	a.TeamInfoCollection.Find(bson.M{}).All(&TeamInfos)
 	for _, team := range TeamInfos {
@@ -89,7 +91,8 @@ func (a *RankSpider) fetchDataFromOg() {
 			logrus.WithField("not found score fore team ", team).WithError(err).Error("should never happen")
 			continue
 		}
-		if score.StatusA =="已完成" {
+		if score.StatusA == "已完成" {
+			logrus.WithField("score ", score).Debug("already registered")
 			//already registered
 			continue
 		}
@@ -97,6 +100,7 @@ func (a *RankSpider) fetchDataFromOg() {
 		ok, err := a.getRegisterStatusFromOg(team.Phone)
 		if err != nil {
 			logrus.WithError(err).Warn("get response error")
+			continue
 		}
 		if err == nil && ok {
 			//wrie ok
@@ -145,7 +149,7 @@ func (a *RankSpider) fetchTeamInfo() {
 		if err == nil {
 			logrus.WithField("team ", team).Debug("already have this team info")
 			continue
-		}else {
+		} else {
 			logrus.WithField("team ", teamInfo.Phone).WithError(err).Debug("not found team data")
 			//var teaminfos []TeamInfo
 			//a.TeamInfoCollection.Find(bson.M{}).All(&teaminfos)
@@ -154,8 +158,8 @@ func (a *RankSpider) fetchTeamInfo() {
 		teamInfo = team.TeamInfo()
 		//insert score first
 		newScore := &ScoreInfo{
-			Phone:      teamInfo.Phone,
-			StatusA:    "未完成",
+			Phone:   teamInfo.Phone,
+			StatusA: "未完成",
 			//ID:         bson.NewObjectId(),
 			CreateTime: time.Now().Unix(),
 			UpdateTime: time.Now().Unix(),
@@ -252,47 +256,46 @@ func (a *RankSpider) getRegisterStatusFromOg(phone string) (bool, error) {
 		//fmt.Println("encode nonce errror ", err)
 		return false, err
 	}
-	if d, err  :=  hex.DecodeString(stateResp.Data); err !=nil {
+	if d, err := hex.DecodeString(stateResp.Data); err != nil {
 		logrus.WithError(err).Warn("decode hex error")
-		return false ,err
-	}else {
+		return false, err
+	} else {
 		if len(d) != 32 {
-			logrus.WithField("data ",stateResp.Data).WithField("len ", len(d)).Warn("data len error")
-		return false ,nil
+			logrus.WithField("data ", stateResp.Data).WithField("len ", len(d)).Warn("data len error")
+			return false, nil
 		}
 		if d[31] == 0x00 {
-			return false,nil
-		}else if d[31] == 0x01 {
+			return false, nil
+		} else if d[31] == 0x01 {
 			logrus.WithField("phone ", phone).Info("got status true")
 			return true, nil
-		}else {
-			logrus.WithField("data ",stateResp.Data).WithField("len ", len(d)).Warn("got wrong data")
-			return false ,nil
+		} else {
+			logrus.WithField("data ", stateResp.Data).WithField("len ", len(d)).Warn("got wrong data")
+			return false, nil
 		}
 	}
 }
 
-
-func (r *RankSpider)GetRankInfo(teamName string )RespRank {
+func (r *RankSpider) GetRankInfo(teamName string) RespRank {
 	var resp RespRank
 	var team TeamInfo
 	//fmt.Println(r.TeamInfoCollection,"251")
-	err := r.TeamInfoCollection.Find(bson.M{"teamname":teamName}).One(&team)
-	if err!=nil  {
+	err := r.TeamInfoCollection.Find(bson.M{"teamname": teamName}).One(&team)
+	if err != nil {
 		logrus.WithError(err).Warn("team data not found")
-		resp.RankInfo =  RespRankInfo{
+		resp.RankInfo = RespRankInfo{
 			ScoresInfo: RespRankInfoScores{
 				TeamName: "暂无",
 				StatusA:  "暂无",
 				StatusB:  "暂无",
 			},
 		}
-	}else {
+	} else {
 		var score ScoreInfo
 		err := r.ScoreInfoCollection.Find(bson.M{"phone": team.Phone}).One(&score)
-		if err!=nil {
+		if err != nil {
 			logrus.WithError(err).Warn("score data not found")
-		}else {
+		} else {
 			resp.RankInfo = RespRankInfo{
 				ScoresInfo: RespRankInfoScores{
 					TeamName: teamName,
@@ -305,25 +308,24 @@ func (r *RankSpider)GetRankInfo(teamName string )RespRank {
 	var scors []ScoreInfo
 	//bson.M{"statusa": "已完成"}
 	err = r.ScoreInfoCollection.Find(bson.M{}).All(&scors)
-	if err!=nil || len(scors) ==0 {
+	if err != nil || len(scors) == 0 {
 		return resp
 	}
 	sort.Sort(ScoresInfo(scors))
-	for i:=0;i<len(scors)&& i<10 ;i++ {
-		err := r.TeamInfoCollection.Find(bson.M{"phone":scors[i].Phone}).One(&team)
-		if err!=nil {
+	for i := 0; i < len(scors) && i < 10; i++ {
+		err := r.TeamInfoCollection.Find(bson.M{"phone": scors[i].Phone}).One(&team)
+		if err != nil {
 			logrus.WithError(err).Warn("data not found")
 		}
 		rankList := RespRankList{
-			RankNum:i,
+			RankNum: i,
 			ScoresInfo: RespScoresInfo{
-				TeamName: team.TeamName,
-				StatusA:  scors[i].StatusA,
+				TeamName:   team.TeamName,
+				StatusA:    scors[i].StatusA,
 				CreateTime: scors[i].UpdateTime,
-
 			},
 		}
-		resp.RankList = append(resp.RankList,rankList)
+		resp.RankList = append(resp.RankList, rankList)
 	}
 	return resp
 }

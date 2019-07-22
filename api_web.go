@@ -78,8 +78,6 @@ func defaultResp() RespRank {
 	}
 }
 
-
-
 func notFoundResp() RespRank {
 	return RespRank{
 		RankInfo: RespRankInfo{
