@@ -45,7 +45,8 @@ func main() {
 	fmt.Println("---------Server Start!---------")
 	fmt.Println("Port: ", 10001)
 	go func() {
-		log.Fatal(http.ListenAndServe(":10001", nil))
+		log.Fatal(http.ListenAndServeTLS(":10001", "fullchain.pem", "privkey.pem", nil))
+		//log.Fatal(http.ListenAndServe(":10001", nil))
 	}()
 
 	// prevent sudden stop. Do your clean up here
