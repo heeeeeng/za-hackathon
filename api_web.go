@@ -52,7 +52,7 @@ func defaultResp() RespRank {
 				ScoresInfo: RespScoresInfo{
 					TeamName:   "小东瓜",
 					StatusA:    "已完成",
-					CreateTime: time.Now().Unix() - 10,
+					CreateTime: time.Now().UnixNano() - 10000,
 					ID:         2,
 				},
 			},
@@ -61,7 +61,7 @@ func defaultResp() RespRank {
 				ScoresInfo: RespScoresInfo{
 					TeamName:   "超级大西瓜",
 					StatusA:    "已完成",
-					CreateTime: time.Now().Unix() - 100,
+					CreateTime: time.Now().UnixNano() - 100000,
 					ID:         3,
 				},
 			},
@@ -70,7 +70,7 @@ func defaultResp() RespRank {
 				ScoresInfo: RespScoresInfo{
 					TeamName:   "大南瓜",
 					StatusA:    "已完成",
-					CreateTime: time.Now().Unix() - 1000,
+					CreateTime: time.Now().UnixNano() - 1000000,
 					ID:         4,
 				},
 			},

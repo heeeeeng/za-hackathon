@@ -105,7 +105,7 @@ func (a *RankSpider) fetchDataFromOg() {
 		if err == nil && ok {
 			//wrie ok
 			score.StatusA = "已完成"
-			score.UpdateTime = time.Now().Unix()
+			score.UpdateTime = time.Now().UnixNano()
 			err = a.ScoreInfoCollection.Update(bson.M{"phone": score.Phone}, &score)
 			if err != nil {
 				logrus.WithField("score ", score).WithError(err).Error("update data err ")
@@ -161,16 +161,16 @@ func (a *RankSpider) fetchTeamInfo() {
 			Phone:   teamInfo.Phone,
 			StatusA: "未完成",
 			//ID:         bson.NewObjectId(),
-			CreateTime: time.Now().Unix(),
-			UpdateTime: time.Now().Unix(),
+			CreateTime: time.Now().UnixNano(),
+			UpdateTime: time.Now().UnixNano(),
 		}
 		err = a.ScoreInfoCollection.Insert(newScore)
 		if err != nil {
 			logrus.WithField("score ", newScore).WithError(err).Error("insert data err ")
 			continue
 		}
-		teamInfo.CreateTime = time.Now().Unix()
-		teamInfo.UpdateTime = time.Now().Unix()
+		teamInfo.CreateTime = time.Now().UnixNano()
+		teamInfo.UpdateTime = time.Now().UnixNano()
 		err = a.TeamInfoCollection.Insert(&teamInfo)
 		if err != nil {
 			logrus.WithField("team", team).WithError(err).Error("insert failed")

@@ -44,8 +44,12 @@ func main() {
 	c.InitRouter()
 	fmt.Println("---------Server Start!---------")
 	fmt.Println("Port: ", 10001)
+
+	certFile := "/cert/fullchain.pem"
+	keyFile := "/cert/privkey.pem"
+
 	go func() {
-		log.Fatal(http.ListenAndServeTLS(":10001", "fullchain.pem", "privkey.pem", nil))
+		log.Fatal(http.ListenAndServeTLS(":10001", certFile, keyFile, nil))
 		//log.Fatal(http.ListenAndServe(":10001", nil))
 	}()
 
