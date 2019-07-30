@@ -61,11 +61,15 @@ func (r *RankSpider) start() {
 	//return
 	r.fetchTeamInfo()
 	// TODO
+
+	ogTicker := time.NewTicker(time.Second * 30)
+	teamInfoTicker := time.NewTicker(time.Second * 30)
+
 	for {
 		select {
-		case <-time.After(time.Second * 30):
+		case <-ogTicker.C:
 			r.fetchDataFromOg()
-		case <-time.After(time.Second * 31):
+		case <-teamInfoTicker.C:
 			r.fetchTeamInfo()
 		case <-r.quit:
 			logrus.Info("got quit signal , stopping")
