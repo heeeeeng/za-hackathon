@@ -105,7 +105,7 @@ func (a *RankSpider) fetchDataFromOg() {
 		if err == nil && ok {
 			//wrie ok
 			score.StatusA = "已完成"
-			score.UpdateTime = time.Now().UnixNano()
+			score.UpdateTime = time.Now().UnixNano() / 1000000
 			err = a.ScoreInfoCollection.Update(bson.M{"phone": score.Phone}, &score)
 			if err != nil {
 				logrus.WithField("score ", score).WithError(err).Error("update data err ")
